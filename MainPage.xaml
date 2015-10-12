@@ -50,6 +50,8 @@
             <Border Background="DarkGray" Margin="20,20,20,20">
                 <TextBlock x:Name="txtOutput" Foreground="Black" TextWrapping="Wrap" Text="" Height="139"/>
             </Border>
+            <TextBox x:Name="txtMeterMateId" HorizontalAlignment="Left" Height="19" Margin="20,0,0,0" TextWrapping="Wrap" Text="" Width="359"/>
+            <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="20,0,20,0" Click="btnSave_Click"/>
         </StackPanel>
 
     </Grid>

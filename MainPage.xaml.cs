@@ -11,6 +11,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Networking;
 using Windows.Networking.Sockets;
+using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Xaml;
@@ -33,6 +34,14 @@ namespace PhoneMeterMate
         private const string NOT_READ = "Not yet read";
         private const string METER_DISCONNECTED = "OBC not connected to meter";
 
+        private ApplicationDataContainer LocalSettings
+        {
+            get
+            {
+                return ApplicationData.Current.LocalSettings;
+            }
+        }
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -54,6 +63,8 @@ namespace PhoneMeterMate
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
+
+            txtMeterMateId.Text = MeterMateId;
         }
 
         private async void btnStart_Click(object sender, RoutedEventArgs e)
@@ -107,7 +118,8 @@ namespace PhoneMeterMate
         {
             using (StreamSocket socket = new StreamSocket())
             {
-                HostName hostname = new HostName("(00:0A:4F:01:21:78)");
+                HostName hostname = new HostName(string.Format("({0})", MeterMateId));
+                //HostName hostname = new HostName("(00:0A:4F:01:21:78)");
 
                 socket.Control.NoDelay = false;
 
@@ -297,6 +309,29 @@ namespace PhoneMeterMate
 
                 return commandString;
             }
+        }
+
+        private string MeterMateId
+        {
+            get
+            {
+                if (LocalSettings.Values["meterMateId"] == null)
+                {
+                    return string.Empty;
+                }
+
+                return (string)LocalSettings.Values["meterMateId"];
+            }
+
+            set
+            {
+                LocalSettings.Values["meterMateId"] = value;  
+            }
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            LocalSettings.Values["meterMateId"] = txtMeterMateId.Text;
         }
     }
 }
